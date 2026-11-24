@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mohdsohailbaig786-lab.github.io/ilm-ki-dunya/sitemap.xml
