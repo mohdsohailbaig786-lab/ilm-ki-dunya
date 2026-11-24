@@ -66,4 +66,20 @@ addEventListener('pagehide',()=>stop());
 tool('Print / PDF',()=>window.print(),tools);
 const index=catalog.findIndex(x=>x[0]===article.dataset.id),nav=document.createElement('nav');nav.className='article-sequence';nav.setAttribute('aria-label','Pichhla aur agla mazmoon');[[index-1,'← Pichhla'],[index+1,'Agla →']].forEach(([i,label])=>{if(catalog[i]){let a=document.createElement('a');a.href=catalog[i][0]+'.html';a.rel=i<index?'prev':'next';a.textContent=label+': '+catalog[i][2];nav.append(a)}});article.querySelector('.reading-links').before(nav);
 }
+
+// Reader features share the catalog above: add future articles there.
+{
+const root='https://mohdsohailbaig786-lab.github.io/ilm-ki-dunya/', key='ilm-bookmarks-v1';
+const articles=catalog.map(x=>({title:x[2],url:root+x[0]+'.html'}));
+const status=document.createElement('p');status.setAttribute('role','status');status.setAttribute('aria-live','polite');
+function saved(){try{const v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v.filter(x=>x&&articles.some(a=>a.url===x.url)).map(x=>articles.find(a=>a.url===x.url)):[]}catch(e){return []}}
+function write(v){try{localStorage.setItem(key,JSON.stringify(v));return true}catch(e){status.textContent='Bookmarks save nahin ho sake. Browser storage ki ijazat check karein.';return false}}
+function button(label,fn){const b=document.createElement('button');b.type='button';b.className='ilm-tool';b.textContent=label;b.addEventListener('click',fn);return b}
+let section;
+function render(){if(!section)return;section.replaceChildren();const list=saved();section.hidden=!list.length;if(!list.length)return;const h=document.createElement('h2');h.textContent='Aap ke bookmarks';section.append(h);const ul=document.createElement('ul');list.forEach(x=>{const li=document.createElement('li'),a=document.createElement('a');a.href=x.url;a.textContent=x.title;li.append(a,button('Hata dein',()=>{if(write(saved().filter(v=>v.url!==x.url)))render()}));ul.append(li)});section.append(ul)}
+if(home){const panel=document.querySelector('.search-panel')||document.querySelector('#categories');panel.append(button('Koi bhi article kholo',()=>{location.href=articles[Math.floor(Math.random()*articles.length)].url}));section=document.createElement('section');section.className='bookmarks';section.hidden=true;document.querySelector('#categories').before(section);section.after(status);render()}
+if(article){const x=articles.find(x=>x.url===root+article.dataset.id+'.html'),share=article.querySelector('a[href^="https://wa.me/"]'),row=document.createElement('div');row.className='reader-actions';share.parentElement.after(row);let bookmark=button('Baad mein padho',()=>{const list=saved(),exists=list.some(v=>v.url===x.url);if(write(exists?list.filter(v=>v.url!==x.url):[...list,x])){sync();status.textContent=exists?'Bookmark hata diya.':'Bookmark save ho gaya.'}});function sync(){const yes=saved().some(v=>v.url===x.url);bookmark.setAttribute('aria-pressed',String(yes));bookmark.textContent=yes?'Bookmark hata dein':'Baad mein padho'}sync();
+const copy=button('Copy Link',async()=>{let ok=false;try{await navigator.clipboard.writeText(x.url);ok=true}catch(e){const input=document.createElement('textarea');input.value=x.url;input.setAttribute('readonly','');input.style.cssText='position:fixed;left:0;top:0;width:1px;height:1px;opacity:0';document.body.append(input);input.select();try{ok=document.execCommand('copy')}catch(e){}input.remove();copy.focus()}status.textContent=ok?'Link copy ho gaya':'Link copy nahin ho saka. Address bar se link copy karein.';clearTimeout(copy.timer);copy.timer=setTimeout(()=>{status.textContent=''},4000)});row.append(bookmark,copy,status);addEventListener('storage',sync)}
+addEventListener('storage',render);addEventListener('pageshow',render);
+}
 }
