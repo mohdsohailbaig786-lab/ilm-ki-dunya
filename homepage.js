@@ -1,6 +1,7 @@
 /* Homepage only. No changes to shared reader, quiz or search logic. */
 (()=>{if(!document.querySelector('.home-hero'))return;
 const search=document.querySelector('.search-panel');if(search)document.querySelector('.home-hero').append(search);
+const picks=document.querySelector('.picks');if(picks)document.querySelector('.home-daily').after(picks);
 document.querySelector('#home-articles').textContent=new Set([...document.querySelectorAll('#catalog .card h3 a')].map(a=>a.getAttribute('href'))).size;
 document.querySelector('#home-categories').textContent=document.querySelectorAll('#catalog>section').length;
 // Built-time fallback: 10 distinct PDF cards in pdf-library.html on 24 Nov 2026.
