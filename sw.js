@@ -1,5 +1,5 @@
 /* Ilm Ki Dunya PWA. Bump VERSION whenever the app shell changes. */
-const VERSION = 'v2-20261125';
+const VERSION = 'v3-20261125';
 const PREFIX = 'ilm-ki-dunya-';
 const CACHE = PREFIX + VERSION;
 const PDF_CACHE = PREFIX + 'pdf-' + VERSION;
@@ -35,7 +35,8 @@ async function page(request) {
 }
 async function asset(request) {
   const cache = await caches.open(CACHE);
-  const saved = await cache.match(request);
+  // Versioned app-shell cache is authoritative across legacy HTML query strings.
+  const saved = await cache.match(request, {ignoreSearch:true});
   if (saved) return saved;
   try {
     const response = await fetch(request);
