@@ -1,5 +1,5 @@
 /* Ilm Ki Dunya PWA. Bump VERSION whenever the app shell changes. */
-const VERSION = 'v3-20261125';
+const VERSION = 'v4-20261125';
 const PREFIX = 'ilm-ki-dunya-';
 const CACHE = PREFIX + VERSION;
 const PDF_CACHE = PREFIX + 'pdf-' + VERSION;
