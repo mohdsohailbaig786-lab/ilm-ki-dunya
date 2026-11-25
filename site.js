@@ -17,7 +17,7 @@ if(article){let id=article.dataset.id,x=catalog.find(x=>x[0]===id);article.inser
     el.href = new URL(path, base).href;
   };
   link('manifest', 'manifest.webmanifest');
-  link('apple-touch-icon', 'icon-192.png');
+  link('apple-touch-icon', 'icon-192.png?v=20261126');
   let theme = document.querySelector('meta[name="theme-color"]');
   if (!theme) { theme = document.createElement('meta'); theme.name = 'theme-color'; document.head.append(theme); }
   theme.content = '#087958';
