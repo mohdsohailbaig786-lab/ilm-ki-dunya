@@ -161,6 +161,7 @@ const sheet=document.createElement('dialog');sheet.className='app-more';sheet.id
 const links=sheet.querySelector('.app-more-links');secondary.forEach(e=>{if(e.textContent.trim()!=='Ilm Ki Dunya')links.append(e)});
 const zikrLink=document.createElement('a');zikrLink.href='zikr.html';zikrLink.textContent='Zikr Counter';links.append(zikrLink);
 const namazLink=document.createElement('a');namazLink.href='namaz.html';namazLink.textContent='Namaz Times';links.append(namazLink);
+const hijriLink=document.createElement('a');hijriLink.href='hijri.html';hijriLink.textContent='Islamic Calendar';links.append(hijriLink);
 sheet.querySelector('button').onclick=()=>sheet.close();sheet.addEventListener('click',e=>{if(e.target===sheet)sheet.close();if(e.target.closest('a'))sheet.close()});document.body.append(sheet);
 const page=location.pathname.split('/').pop()||'index.html',isHome=page==='index.html',isArticle=!!document.querySelector('article')&&page!=='about.html';
 header.classList.add('app-header');const skip=header.querySelector('.skip');header.replaceChildren();if(skip)header.append(skip);
