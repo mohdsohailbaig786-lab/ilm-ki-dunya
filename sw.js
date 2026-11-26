@@ -1,11 +1,11 @@
 /* Ilm Ki Dunya PWA. Bump VERSION whenever the app shell changes. */
-const VERSION = 'v11-20261126-namaz';
+const VERSION = 'v12-20261126-hijri';
 const PREFIX = 'ilm-ki-dunya-';
 const CACHE = PREFIX + VERSION;
 const PDF_CACHE = PREFIX + 'pdf-' + VERSION;
 const BASE = new URL('./', self.location.href);
 const local = path => new URL(path, BASE).href;
-const SHELL = ['./', 'index.html', 'waqiat.html', 'zikr.html', 'namaz.html', 'offline.html', 'style.css', 'site.js', 'homepage.js', 'manifest.json', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png'];
+const SHELL = ['./', 'index.html', 'waqiat.html', 'zikr.html', 'namaz.html', 'hijri.html', 'offline.html', 'style.css', 'site.js', 'homepage.js', 'manifest.json', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL.map(path => new Request(local(path), {cache:'reload'})))).then(() => self.skipWaiting()));
 });
