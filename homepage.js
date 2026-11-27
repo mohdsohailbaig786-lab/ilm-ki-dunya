@@ -2,8 +2,8 @@
 (()=>{if(!document.querySelector('.home-hero'))return;
 const search=document.querySelector('.search-panel');if(search)document.querySelector('.home-hero').append(search);
 const picks=document.querySelector('.picks');if(picks)document.querySelector('.home-daily').after(picks);
-document.querySelector('#home-articles').textContent=new Set([...document.querySelectorAll('#catalog .card h3 a')].map(a=>a.getAttribute('href'))).size;
-document.querySelector('#home-categories').textContent=document.querySelectorAll('#catalog>section').length;
+document.querySelector('#home-articles').textContent=new Set([...document.querySelectorAll('#categories .card h3 a')].map(a=>a.getAttribute('href'))).size;
+document.querySelector('#home-categories').textContent=document.querySelectorAll('#catalog>section').length+3;
 // Built-time fallback: 10 distinct PDF cards in pdf-library.html on 24 Nov 2026.
 // Update this fallback AND #home-pdfs in index.html when adding library cards.
 fetch('pdf-library.html').then(r=>{if(!r.ok)throw Error();return r.text()}).then(t=>{const doc=new DOMParser().parseFromString(t,'text/html');const links=[...doc.querySelectorAll('a[href]')].map(a=>a.getAttribute('href')).filter(h=>/\.pdf(?:[?#]|$)/i.test(h));const count=new Set(links.map(h=>h.split(/[?#]/)[0])).size;if(count)document.querySelector('#home-pdfs').textContent=count}).catch(()=>{});
