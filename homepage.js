@@ -19,3 +19,16 @@ dailyFact();more.addEventListener('click',()=>{yesterday=true;dailyFact()});toda
 // Approximation (typically within a day), not a local crescent-visibility prediction.
 function moon(){const age=((Date.now()-Date.UTC(2000,0,6,18,14))/86400000%29.530588853+29.530588853)%29.530588853,p=age/29.530588853,k=Math.cos(2*Math.PI*p),illum=Math.round((1-k)*50),wax=p<.5;const names=['Naya Chand','Barhta hua hilal','Pehli chauthai','Barhta hua chand','Poora Chand','Ghatta hua chand','Aakhri chauthai','Ghatta hua hilal'];document.querySelector('#home-phase').textContent=names[Math.floor(p*8+.5)%8];document.querySelector('#home-light').textContent='Taqreeban '+illum+'% roshan';const rx=Math.max(.001,Math.abs(k)*44);let d;if(wax)d='M50 6 A44 44 0 0 1 50 94 A'+rx+' 44 0 0 '+(k>=0?0:1)+' 50 6Z';else d='M50 6 A44 44 0 0 0 50 94 A'+rx+' 44 0 0 '+(k>=0?1:0)+' 50 6Z';document.querySelector('#home-moon-path').setAttribute('d',d)}moon();setInterval(()=>{dailyFact();moon()},60000);
 })();
+
+// Homepage catalogue includes the new corners without changing shared quiz logic.
+(()=>{
+const input=document.querySelector('#article-search'),output=document.querySelector('#search-results'),status=document.querySelector('#search-status'),old=document.querySelector('.category-chips');
+if(!input||!output||!status||!old)return;
+const entries=[...document.querySelectorAll('#categories .card h3 a')].map(a=>{const card=a.closest('.card');return {href:a.getAttribute('href'),category:card.querySelector('.badge')?.textContent.trim()||'',text:card.textContent.toLocaleLowerCase(),html:card.outerHTML}}).filter((x,i,a)=>a.findIndex(y=>y.href===x.href)===i);
+let selected='All';
+function render(){const q=input.value.trim().toLocaleLowerCase(),tokens=q.split(/\s+/).filter(Boolean),found=entries.filter(x=>(selected==='All'||x.category===selected)&&tokens.every(t=>x.text.includes(t)));output.hidden=!q;output.innerHTML=q?found.map(x=>x.html).join(''):'';status.textContent=!q?entries.length+' articles mein se apna topic talaash karein.':found.length?found.length+' articles mile.':'Koi article nahin mila. Doosra lafz azmaayein.';}
+input.addEventListener('input',event=>{event.stopImmediatePropagation();render()},true);
+const chips=old.cloneNode(false);old.replaceWith(chips);
+['All',...new Set(entries.map(x=>x.category))].forEach(category=>{const button=document.createElement('button');button.type='button';button.className='ilm-tool';button.textContent=category;button.setAttribute('aria-pressed',String(category==='All'));button.addEventListener('click',()=>{selected=category;chips.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));document.querySelectorAll('#categories section').forEach(section=>{if(section.querySelector('.card h3 a'))section.hidden=category!=='All'&&![...section.querySelectorAll('.card .badge')].some(b=>b.textContent.trim()===category)});render()});chips.append(button)});
+render();
+})();
